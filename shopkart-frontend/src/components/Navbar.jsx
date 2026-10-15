@@ -35,10 +35,11 @@ function Navbar() {
     const handleLogout = async () => {
         try {
             await api.post('/customers/logout')
-            window.dispatchEvent(new CustomEvent('auth-changed'))
-            navigate('/login')
         } catch (error) {
             console.error('Logout error:', error.response?.data)
+        } finally {
+            localStorage.removeItem('token')
+            window.dispatchEvent(new CustomEvent('auth-changed'))
             navigate('/login')
         }
     }

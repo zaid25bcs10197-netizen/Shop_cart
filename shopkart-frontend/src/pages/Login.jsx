@@ -30,7 +30,12 @@ function Login() {
 
         try {
             setLoading(true)
-            await api.post('/customers/login', formData)
+            const res = await api.post('/customers/login', formData)
+
+            // Save token for cross-origin Bearer auth (cookies may be blocked)
+            if (res.data.token) {
+                localStorage.setItem('token', res.data.token)
+            }
 
             // Dispatch auth event to refresh user's cart immediately
             window.dispatchEvent(new CustomEvent('auth-changed'))

@@ -5,4 +5,14 @@ const api = axios.create({
     withCredentials: true
 })
 
-export default api
+// Attach JWT token from localStorage as Bearer header on every request.
+// This is the reliable cross-origin auth method (cookies can be blocked cross-site).
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token')
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+})
+
+export default api
